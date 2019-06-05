@@ -43,8 +43,11 @@ export default {
     position: relative;
     width: 70vh;
     min-width: 400px;
+    max-width: 750px;
     height: 70vh;
     min-height: 400px;
+    max-height: 799px;
+    box-shadow: 3px 3px 6.1px rgb(2, 14, 31);
     border: 3px solid rgb(50, 96, 165);
     background-color: rgb(8, 38, 84);
     border-radius: 30px;
@@ -91,11 +94,12 @@ export default {
 }
 .login_box_inner_input {
     background-color: rgba(0, 0, 0, 0);
-    width: 60%;
+    width: 69%;
     height: 60px;
     border: 0;
     font-size: 60px;
     color: rgb(92, 132, 192);
+    text-shadow: 0 0 30px rgb(92, 132, 192);
     border-bottom: 3px solid rgb(50, 96, 165);
     text-align: center;
     outline: none;
@@ -121,7 +125,7 @@ export default {
 }
 .login_box_bottom button:hover {
     padding-bottom: 5px;
-    text-shadow: 0 0 20px rgb(92, 132, 192);
+    text-shadow: 0 0 30px rgb(92, 132, 192);
     transition: all 0.5s;
     cursor: pointer;
 }
