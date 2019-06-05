@@ -11,6 +11,7 @@
                 <div class="login_box_inner_input_outer">
                     <p>Your name?</p>
                     <input class="login_box_inner_input"/>
+                    <p style="font-size: 20px">Click to join ↓</p>
                 </div>
             </div>
             <!-- 下部文字框 -->
@@ -98,7 +99,8 @@ export default {
     border-bottom: 3px solid rgb(50, 96, 165);
     text-align: center;
     outline: none;
-    margin-top: 9px;
+    margin-top: 5%;
+    margin-bottom: 10%;
 }
 .login_box_bottom {
     position: relative;
@@ -119,6 +121,7 @@ export default {
 }
 .login_box_bottom button:hover {
     padding-bottom: 5px;
+    text-shadow: 0 0 20px rgb(92, 132, 192);
     transition: all 0.5s;
     cursor: pointer;
 }
