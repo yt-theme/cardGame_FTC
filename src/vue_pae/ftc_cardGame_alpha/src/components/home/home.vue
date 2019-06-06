@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="home_container">
         <!-- 角色牌 标签页 -->
         <div ref="tabs_container_role" class="tabs_container tabs_role">
             <div class="tabs_content">
@@ -20,11 +20,19 @@
                 魔法牌
             </div>
         </div>
+        <!-- 对战登录框 -->
+        <div class="battleLogin_container">
+            <Homebattlelogin></Homebattlelogin>
+        </div>
     </div>
 </template>
 
 <script>
+import Homebattlelogin from './home_battleLogin/home_battleLogin'
 export default {
+    components: {
+        Homebattlelogin
+    },
     data () {
         return {
             roleTag_toggle: true,
@@ -65,20 +73,23 @@ export default {
 </script>
 
 <style scoped>
+.home_container {
+    background-color: #0b3469;
+}
 @keyframes tabs_container_dropDown {
-    0% { top: calc(-70vh - 6px); }
+    0% { top: calc(-80vh - 6px); }
     100% { top: 10vh; }
 }
 @keyframes tabs_container_dropDown_close {
     0% { top: 10vh; }
-    100% { top: calc(-70vh - 6px); }
+    100% { top: calc(-80vh - 6px); }
 }
 .tabs_container {
     position: absolute;
     left: 5vw;
-    top: calc(-70vh - 6px);
+    top: calc(-80vh - 6px);
     width: 90vw;
-    height: 70vh;
+    height: 80vh;
     background-color: rgb(50, 96, 165);
     box-shadow: 3px 3px 6.1px rgb(2, 14, 31);
     border-radius: 30px;
@@ -115,8 +126,16 @@ export default {
     border-radius: 0 0 15px 15px;
     font-size: 28px;
     color: rgb(128, 166, 223);
+    cursor: pointer;
 }
 .tabs_container:nth-child(2) .tabs_little_tag {
     left: 20%;
+}
+.battleLogin_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
 }
 </style>
