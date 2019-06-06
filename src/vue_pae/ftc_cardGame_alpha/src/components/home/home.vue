@@ -116,7 +116,8 @@ export default {
     left: 30px;
     bottom: -10%;
     width: 14%;
-    min-width: 100px;
+    min-width: 170px;
+    max-width: 200px;
     height: 10%;
     display: flex;
     justify-content: center;
@@ -124,12 +125,12 @@ export default {
     box-shadow: 3px 3px 6.1px rgb(2, 14, 31);
     background-color: rgb(50, 96, 165);
     border-radius: 0 0 15px 15px;
-    font-size: 28px;
+    font-size: 2.3em;
     color: rgb(128, 166, 223);
     cursor: pointer;
 }
 .tabs_container:nth-child(2) .tabs_little_tag {
-    left: 20%;
+    left: calc(5vw + 170px);
 }
 .battleLogin_container {
     display: flex;
