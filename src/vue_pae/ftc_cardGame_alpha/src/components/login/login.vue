@@ -10,22 +10,40 @@
             <div class="login_box_inner">
                 <div class="login_box_inner_input_outer">
                     <p>Your name?</p>
-                    <input class="login_box_inner_input"/>
+                    <input v-model="name" class="login_box_inner_input"/>
                     <p style="font-size: 20px">Click to join ↓</p>
                 </div>
             </div>
             <!-- 下部文字框 -->
             <div class="login_box_bottom">
                 <span> </span>
-                <button>Go</button>
+                <button @click="login">Go</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { updateSession, querySession } from '@/lib/utils'
 export default {
-
+    data () {
+        return {
+            name: ''
+        }
+    },
+    methods: {
+        // 登录方法
+        login () {
+            if (this.name) {
+                // 将 name 存入 sessionStorage
+                updateSession('userName', this.name)
+                if (querySession('userName')) {
+                    // 如果有值则跳转路由
+                    this.$router.replace('/home')
+                }
+            }
+        }
+    }
 }
 </script>
 
@@ -99,7 +117,7 @@ export default {
     border: 0;
     font-size: 60px;
     color: rgb(92, 132, 192);
-    text-shadow: 0 0 30px rgb(92, 132, 192);
+    text-shadow: 0 0 4px rgb(2, 14, 31);
     border-bottom: 3px solid rgb(50, 96, 165);
     text-align: center;
     outline: none;

@@ -12,7 +12,7 @@ export default {
     }
   },
   mounted () {
-    this.$router.replace('/login')
+    this.$router.replace('/home')
   }
 }
 </script>
