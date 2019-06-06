@@ -114,11 +114,12 @@ export default {
 .tabs_little_tag {
     position: absolute;
     left: 30px;
-    bottom: -10%;
+    bottom: -60px;
     width: 14%;
     min-width: 170px;
     max-width: 200px;
-    height: 10%;
+    /* height: 10%; */
+    min-height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
