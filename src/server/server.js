@@ -1,7 +1,6 @@
 let express = require('express')
 let router  = express.Router()
 let io      = require('socket.io')
-let path    = require('path')
 
 let server_router = require('./router/router')
 let socket_router = require('./socket/socket')
@@ -27,7 +26,7 @@ class Server {
     // 初始化服务器
     init () {
         // 静态文件目录
-        this.app.use(this.express.static(path.join(STATIC_DIR)))
+        this.app.use('/file', this.express.static(STATIC_DIR))
     }
 
     // 启动服务器

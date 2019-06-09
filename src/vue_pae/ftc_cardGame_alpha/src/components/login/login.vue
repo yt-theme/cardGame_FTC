@@ -54,7 +54,7 @@ export default {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    color: #f1f2f1;
+    color: rgb(92, 132, 192);
     background-color: #0b3469;
 }
 .login_box {
@@ -72,7 +72,7 @@ export default {
     padding: 80px 0;
 }
 .login_box_top *, .login_box_bottom * {
-    color: rgb(92, 132, 192);
+    color: rgb(128, 166, 223);
     font-size: 40px;
 }
 .login_box_top {
@@ -108,7 +108,7 @@ export default {
 }
 .login_box_inner_input_outer> p {
     font-size: 30px;
-    color: rgb(92, 132, 192);
+    color: rgb(128, 166, 223);
 }
 .login_box_inner_input {
     background-color: rgba(0, 0, 0, 0);
@@ -116,13 +116,18 @@ export default {
     height: 60px;
     border: 0;
     font-size: 60px;
-    color: rgb(92, 132, 192);
+    color: rgb(128, 166, 223);
     text-shadow: 0 0 4px rgb(2, 14, 31);
     border-bottom: 3px solid rgb(50, 96, 165);
     text-align: center;
     outline: none;
     margin-top: 5%;
     margin-bottom: 10%;
+    transition: all 0.5s;
+}
+.login_box_inner_input:focus {
+    border-bottom: 3px solid rgb(128, 166, 223);
+    transition: all 0.5s;
 }
 .login_box_bottom {
     position: relative;

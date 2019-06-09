@@ -1,57 +1,86 @@
 module.exports = function ( roomInfo, socket_server ) {
         // socket 连接事件
         socket_server.on('connection', (socket) => {
-            let url = socket.request.header.referer
-            let splited = url.split('/')
-            // 房间ID
-            let roomID = splited[splited.length - 1]
-            let user = ''
+            // 存储房间id
+            let roomID = ''
+            // 存储房间内 client 数量
+            let roomClientNum = 0
 
-            // 加入房间事件
-            socket.on('join', (userName) => {
-                user = userName
+            // 测试登录
+            socket.on('test', (name) => {
+                socket.emit('logins', {
+                    nickname: name,
+                    id: socket.id
+                })
+            })
 
-                // 将用户加入房间名单
-                if (!roomInfo[roomID]) {
-                    // 房间存储用户的数组
-                    roomInfo[roomID] = []
-                }
-                // 将用户存入房间
-                roomInfo[roomID].push(user)
+            // 登录房间
+            socket.on('joinroom', (data, callback) => {
+                // data => inviteCode 为房间名
+                console.log('加入房间 =>', data)
+                roomID = data['inviteCode']
+                roomClientNum += 1
 
-                // 用户加入房间
+                // 如果房间内已有两个客户端连接则不进行加入操作
+
+
+                // 创建频道
                 socket.join(roomID)
-                // 通知房间内人员
-                socket_server.to(roomID).emit('sys', user + '加入了房间', roomInfo[roomID])
-                console.log(user + '加入了' + roomID)
+                // 对房间内用户发送消息
+                socket_server.sockets.in(roomID).emit('logins', '用户加入' + roomID + '房间内玩家数量' + roomClientNum)
+                console.log('socket_server.sockets rooms =>', socket_server.sockets.adapter.rooms)
+
             })
 
-            // 用户离开房间事件
-            socket.on('leave', () => {
-                socket.emit('disconnect')
-            })
+            // console.log('client连接..')
+            // let roomID = null
 
-            // 断连事件
-            socket.on('disconnect', function () {
-                // 将用户从房间移除
-                let index = roomInfo[roomID].indexOf(user)
-                if (index !== -1) {
-                    roomInfo[roomID].splice(index, 1)
-                }
+            // // 加入房间 事件
+            // socket.on('joinRoom', (data, callback) => {
+            //     // data => inviteCode 为房间名
+            //     console.log('加入房间 =>', data)
+            //     roomID = data['inviteCode']
 
-                // 用户退出房间
-                socket.leave(roomID)
-                socket_server.to(roomID).emit('sys', user + '退出了房间', roomInfo[roomID])
-                console.log(user + '退出了' + roomID)
-            })
+            //     // 创建频道
+            //     socket.join(roomID)
+            //     // 对房间内用户发送消息
+            //     socket_server.sockets.in(roomID).emit('systemMsg', '用户加入' + roomID)
+            //     console.log('socket_server.sockets =>', socket_server.sockets.adapter)
 
-            // 接收用户消息 发送相应房间
-            socket.on('message', (msg) => {
-                // 如果用户不存在房间则不发送
-                if (roomInfo[roomID].indexOf(user) === -1) {
-                    return false
-                }
-                socket_server.to(roomID).emit('msg', user, msg)
-            })
+            // })
+
+            // // 接收用户消息 发送相应房间
+            // socket.on('sendMsg', (msg, callback) => {
+            //     callback({
+            //         "stat": 1,
+            //         "msg": msg + ': ' + 'ok'
+            //     })
+
+            //     // 触发客户端接收消息
+            //     socket.emit('receiveMsg', msg)
+            //     socket.broadcast.to(roomID).emit('receiveMsg', msg)
+
+            //     // socket_server.to(roomID).emit('msg', user, msg)
+            // })
+
+            // // 用户离开房间事件
+            // socket.on('leave', () => {
+            //     socket.leave(roomID)
+            //     console.log('client离开房间')
+            // })
+
+            // // 断连事件
+            // socket.on('disconnect', function () {
+            //     // 将用户从房间移除
+            //     // let index = roomInfo[roomID].indexOf(user)
+            //     // if (index !== -1) {
+            //     //     roomInfo[roomID].splice(index, 1)
+            //     // }
+
+            //     // // 用户退出房间
+            //     // socket.leave(roomID)
+            //     // socket_server.to(roomID).emit('sys', user + '退出了房间', roomInfo[roomID])
+            //     // console.log(user + '退出了' + roomID)
+            // })
         })
 }
