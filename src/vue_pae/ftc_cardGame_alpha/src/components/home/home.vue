@@ -4,7 +4,7 @@
         <div ref="tabs_container_role" class="tabs_container tabs_role">
             <div class="tabs_wrap">
                 <div class="tabs_content">
-                    <div v-for="i in cardDataRole_list">
+                    <div v-for="i in cardDataRole_list" @mousemove="show_bigCard($event, i)" @mouseleave="hide_bigCard($event)">
                         <img :src="i.card_url"/>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
         <div ref="tabs_container_magic" class="tabs_container tabs_magic">
             <div class="tabs_wrap">
                 <div class="tabs_content">
-                    <div v-for="i in cardDataMagic_list">
+                    <div v-for="i in cardDataMagic_list" @mousemove="show_bigCard($event, i)" @mouseleave="hide_bigCard($event)">
                         <img :src="i.card_url"/>
                     </div>
                 </div>
@@ -32,15 +32,21 @@
         <div class="battleLogin_container">
             <Homebattlelogin></Homebattlelogin>
         </div>
+        <!-- 查看卡牌大图 -->
+        <div ref="lookbigcard_component" class="lookbigcard_wrapp" v-show="lookbigcard_show">
+            <Lookbigcard :src="current_showBigCard_src" :text="current_showBigCard_text"></Lookbigcard>
+        </div>
     </div>
 </template>
 
 <script>
 import Homebattlelogin from './home_battleLogin/home_battleLogin'
+import Lookbigcard from '../public/lookBigCard/lookBigCard'
 import { api_queryCardJson } from '@/lib/api.js'
 export default {
     components: {
-        Homebattlelogin
+        Homebattlelogin,
+        Lookbigcard
     },
     data () {
         return {
@@ -50,6 +56,22 @@ export default {
             // 卡牌信息列表
             cardDataRole_list: [],
             cardDataMagic_list: [],
+
+            // 查看大图显示
+            lookbigcard_show: false,
+            // 当前 需要查看大图的 卡牌
+            current_showBigCard_src: '',
+            current_showBigCard_text: {
+                property: '暂无属性',
+                skill_first: '暂无第一技能',
+                skill_second: '暂无第二技能'
+            },
+
+            // 当前卡牌大图宽高 >0 值
+            currentBigCardWH: {
+                width: '',
+                height: ''
+            }
         }
     },
     methods: {
@@ -95,6 +117,64 @@ export default {
             }).catch((err) => {
 
             })
+        },
+        // 查看卡牌大图事件
+        show_bigCard (event, cardObj) {
+            // 图片
+            this.current_showBigCard_src = cardObj.card_url
+            // text内容
+            this.current_showBigCard_text = {
+                property: cardObj.card_info.first || '暂无属性',
+                skill_first: cardObj.card_info.second || '暂无第一技能',
+                skill_second: cardObj.card_info.proto || '暂无第二技能'
+            }
+            
+            // 获取框宽度 高度
+            let boxWidth = this.$refs.lookbigcard_component.offsetWidth
+            if (boxWidth > 0 ) {
+                this.currentBigCardWH.width = boxWidth
+            } else {
+                if (this.currentBigCardWH.width > 0) {
+                    boxWidth = this.currentBigCardWH.width 
+                }
+            }
+            let boxHeight = this.$refs.lookbigcard_component.offsetHeight
+            if (boxHeight > 0 ) {
+                this.currentBigCardWH.height = boxHeight
+            } else {
+                if (this.currentBigCardWH.height  > 0) {
+                    boxHeight = this.currentBigCardWH.height 
+                }
+            }
+
+            // 屏幕宽度 高度
+            let screenWidth = document.body.clientWidth
+            let screenHeight = document.body.clientHeight
+            
+            // 如果框右边超过显示区域长度则显示至左边
+            if ( (event.clientX + boxWidth + 20) >= screenWidth ) {
+                this.$refs.lookbigcard_component.style.left = (event.clientX - boxWidth - 20) + 'px'
+            } else {
+                this.$refs.lookbigcard_component.style.left = (event.clientX + 20) + 'px'
+            }
+
+            console.log('event', event.clientX, event.clientY, boxWidth, screenWidth)
+
+            // 如果框下面超过屏幕高则显示至上面
+            if ( (event.clientY + boxHeight + 20) >= screenHeight ) {
+                this.$refs.lookbigcard_component.style.top = (event.clientY - ((event.clientY + boxHeight + 20) - screenHeight)) + 'px'
+            } else {
+                this.$refs.lookbigcard_component.style.top = (event.clientY - 20) + 'px'
+            }
+            this.$nextTick(()=>{
+                this.lookbigcard_show = true
+            })
+        },
+        // 隐藏卡牌大图事件
+        hide_bigCard (event) {
+            this.$nextTick(()=>{
+                this.lookbigcard_show = false
+            })
         }
     },
     mounted () {
@@ -123,7 +203,6 @@ export default {
     width: 90vw;
     height: 80vh;
     background-color: rgb(50, 96, 165);
-    box-shadow: 3px 3px 6.1px rgb(2, 14, 31);
     border-radius: 15px;
     z-index: 999;
 }
@@ -157,13 +236,12 @@ export default {
 .tabs_content> div {
     display: inline-block;
     border-radius: 5px;
-    box-shadow: 0 0 9px rgb(2, 14, 31);
-    margin: 20px 10px 10px 10px;
-    overflow: hidden;
+    padding: 20px 10px 10px 10px;
 }
 .tabs_content> div> img {
     width: 100px;
-    height: 120px
+    height: auto;
+    box-shadow: 0 0 5px rgb(2, 14, 31);
 }
 .tabs_content ul {
     list-style: none;
@@ -196,5 +274,14 @@ export default {
     align-items: center;
     width: 100vw;
     height: 100vh;
+}
+.lookbigcard_wrapp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20vw;
+    min-width: 410px;
+    z-index: 9999;
+    /* transition: all linear 0.17s; */
 }
 </style>
