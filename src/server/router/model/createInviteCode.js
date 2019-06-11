@@ -1,5 +1,6 @@
 // 生成邀请码
 const queryString = require('querystring')
+const uuid = require('uuid')
 
 // redis
 const { Redis_client } = require('../../db/db')
@@ -19,9 +20,10 @@ class CreateInviteCode {
                 trueData = queryString.parse(currentData)
 
                 // 生成码
-                let tmp = []
-                for (let i=0; i<7; i++) { tmp.push(parseInt(Math.random() * 9, 10)) }
-                let inviteCode = 'A' + tmp.join('')
+                // let tmp = []
+                // for (let i=0; i<7; i++) { tmp.push(parseInt(Math.random() * 9, 10)) }
+                // let inviteCode = 'A' + tmp.join('')
+                let inviteCode = 'A' + uuid.v1().split('-').join('')
 
                 // 存入 redis
                 Redis_client.set(inviteCode, trueData['user_name'], (err, response) => {

@@ -22,13 +22,35 @@ module.exports = function ( roomInfo, socket_server ) {
                 roomClientNum += 1
 
                 // 如果房间内已有两个客户端连接则不进行加入操作
+                // 房间内client数量
+                let numberOfClient_inRoom = 0
+                try {
+                    numberOfClient_inRoom = socket_server.sockets.adapter.rooms[roomID].length
+                } catch {
+                    numberOfClient_inRoom = 0
+                }
+                if (numberOfClient_inRoom === 2) {
+                    // 房间已满
+                    socket.emit('systemmsg_battle', {
+                        stat: 0,
+                        data: '房间人满'
+                    })
+                    console.log(roomID + '房间已满')
+                } else {
 
+                    // 创建频道
+                    socket.join(roomID)
+                    // 对房间内用户发送消息
+                    socket_server.sockets.in(roomID).emit('logins', '用户加入' + roomID + '房间内玩家数量' + roomClientNum)
+                    console.log(socket_server.sockets.adapter.rooms[roomID].length, )
 
-                // 创建频道
-                socket.join(roomID)
-                // 对房间内用户发送消息
-                socket_server.sockets.in(roomID).emit('logins', '用户加入' + roomID + '房间内玩家数量' + roomClientNum)
-                console.log('socket_server.sockets rooms =>', socket_server.sockets.adapter.rooms)
+                    // 发送允许开战信息
+                    socket.emit('systemmsg_battle', {
+                        stat: 1,
+                        data: '等待玩家进入'
+                    })
+
+                }
 
             })
 

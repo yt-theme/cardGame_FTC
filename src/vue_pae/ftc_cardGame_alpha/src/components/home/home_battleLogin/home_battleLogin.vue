@@ -11,7 +11,7 @@
         </ul>
         <!-- 匹配按钮 -->
         <div v-if="inviteCode" class="home_battleLogin_match">
-            <button @click="battle">开战</button>
+            <button :disabled="battleBtnDisabled" @click="battle">{{ battleBtnTxt }}</button>
         </div>
         <!-- 为准备状态 匹配按钮 -->
         <div v-if="! inviteCode" class="home_battleLogin_match_not">
@@ -26,17 +26,25 @@ import { querySession, updateSession } from '@/lib/utils.js'
 export default {
     data () {
         return {
-            inviteCode: ''
+            inviteCode: '',
+
+            // 开战按钮 txt
+            battleBtnTxt: '开战',
+            // 开战按钮禁用
+            battleBtnDisabled: false
         }
     },
     watch: {
-        '$route' () {
-            
+        // 如果 inviteCode 有变化 恢复初始 battleBtn
+        inviteCode () {
+            this.battleBtnDisabled = false;
+            this.battleBtnTxt = '开战'
         }
     },
     methods: {
         // 创建随机数
         queryCreateCode () {
+            this.battleBtnTxt = '开战'
             // 请求邀请码
             api_createInviteCode({
                 'user_name': querySession('userName') || ''
@@ -53,6 +61,7 @@ export default {
         },
         // 战斗开始
         battle () {
+            this.battleBtnTxt = '匹配中'
             // 检查是否存在邀请码
             if (this.inviteCode) {
 
@@ -80,8 +89,15 @@ export default {
             console.log('logins vue =>', value)
         },
         // 接受系统消息
-        systemmsg (value) {
+        systemmsg_battle (value) {
             console.log('system msg =>', value)
+            let stat = value['stat']
+            switch (stat) {
+                // 房间已满
+                case 0: this.battleBtnTxt = value['data']; return false; break;
+                // 可以进入战斗页
+                case 1: this.battleBtnTxt = value['data']; this.battleBtnDisabled = true; break;
+            }
         }
         // // 系统消息
         // systemMsg: function (data) {
