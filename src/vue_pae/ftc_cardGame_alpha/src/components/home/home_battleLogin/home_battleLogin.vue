@@ -88,7 +88,7 @@ export default {
         logins (value) {
             console.log('logins vue =>', value)
         },
-        // 接受系统消息
+        // 接受系统开战消息
         systemmsg_battle (value) {
             console.log('system msg =>', value)
             let stat = value['stat']
