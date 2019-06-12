@@ -25,20 +25,10 @@ export default {
         }
     },
     mounted () {
-        // this.inviteCode = querySession('inviteCode')
-        // if (this.inviteCode) {
-        //     // 连接 socket
-        //     this.$socket.emit('join', {
-        //         "inviteCode": this.inviteCode
-        //     })
-        //     // 接受信息
-        //     this.$socket.on('system', (msg) => {
-        //         console.log('system =>', msg)
-        //     })
-        // }
+
     },
     destory () {
-
+        this.leave_room()
     }
 }
 </script>

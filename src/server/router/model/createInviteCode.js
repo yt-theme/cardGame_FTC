@@ -20,9 +20,6 @@ class CreateInviteCode {
                 trueData = queryString.parse(currentData)
 
                 // 生成码
-                // let tmp = []
-                // for (let i=0; i<7; i++) { tmp.push(parseInt(Math.random() * 9, 10)) }
-                // let inviteCode = 'A' + tmp.join('')
                 let inviteCode = 'A' + uuid.v1().split('-').join('')
 
                 // 存入 redis

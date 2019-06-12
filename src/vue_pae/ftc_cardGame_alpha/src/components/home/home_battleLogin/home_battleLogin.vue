@@ -59,24 +59,17 @@ export default {
 
             })
         },
-        // 战斗开始
+        // 战斗按钮
         battle () {
             this.battleBtnTxt = '匹配中'
             // 检查是否存在邀请码
             if (this.inviteCode) {
-
                 this.$socket.emit('joinroom', { inviteCode: this.inviteCode })
-                // // 连接 socket
-                // this.$socket.emit('joinRoom', { "inviteCode": this.inviteCode }, (data) => {
-                //     // console.log("加入房间回调 =>", data)
-
-                //     setInterval(() => {
-                //         this.$socket.emit('sendMsg', "client消息 =>" + this.inviteCode, (data) => {
-                //             console.log('sendMsg 消息回调 =>', data)
-                //         })
-                //     }, 3000)
-                // })
             }
+        },
+        // 战斗可以跳转路由
+        battleJumpRoute () {
+            this.$router.replace('/battle')
         }
     },
     sockets: {
@@ -95,8 +88,14 @@ export default {
             switch (stat) {
                 // 房间已满
                 case 0: this.battleBtnTxt = value['data']; return false; break;
-                // 可以进入战斗页
+                // 等待玩家进入
                 case 1: this.battleBtnTxt = value['data']; this.battleBtnDisabled = true; break;
+                // 可以战斗
+                case 2: 
+                    this.battleBtnTxt = value['data']; this.battleBtnDisabled = true;
+                    // 跳转路由方法
+                    this.battleJumpRoute()
+                    break;
             }
         }
         // // 系统消息
