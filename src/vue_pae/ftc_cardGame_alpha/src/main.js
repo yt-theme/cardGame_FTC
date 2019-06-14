@@ -8,7 +8,7 @@ import store from './store/index'
 import VueSocketio from 'vue-socket.io'
 import socketio from 'socket.io-client'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 Vue.use(
   new VueSocketio({
