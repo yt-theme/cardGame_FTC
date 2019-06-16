@@ -4,7 +4,7 @@
 const queryString = require('querystring')
 
 // redis
-const { Redis_client } = require('../../db/db')
+const { Redis_client } = require('../../db/redis')
 
 class QueryCardJson {
     constructor (req, res) {

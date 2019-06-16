@@ -8,6 +8,9 @@ let socket_router = require('./socket/socket')
 // 配置文件 => 静态文件目录
 let { STATIC_DIR, SERVER_PORT } = require('../../config.js')
 
+// mongo
+let { Test_model, CardProperty_model } = require('./db/mongodb')
+
 class Server {
     constructor () {
         this.express       = express
@@ -27,6 +30,39 @@ class Server {
     init () {
         // 静态文件目录
         this.app.use('/file', this.express.static(STATIC_DIR))
+        // 初始化 mongodb
+        // Test_model().insert({'name': '222222222', 'text': 'wqrfaw4ef'}).then((result) => {
+
+        //     Test_model().updateMany({"name": "222222222"}, {$set:{"name": "111"}}).then((result) => {
+
+        //         Test_model().find({}, (result) => {
+
+        //         }).catch((err) => { throw err })
+
+        //     }).catch((err) => { throw err })
+
+        // }).catch((err) => { throw err })
+        CardProperty_model().insert({
+            id: 'FURRY001/2019.07',
+            img_name: '1.jpg',
+            img_url: 'http://127.0.0.1:1234/file/img/1.jpg',
+
+            skill_first_text: '野外生存',
+            skill_first_consume_type: 7,
+            skill_first_consume: 1,
+            skill_first_damage: 0,
+
+            skill_second_text: '星辰之跃',
+            skill_second_consume_type: 3,
+            skill_second_consume: 3,
+            skill_second_damage: 20,
+
+            health: 80,
+            role_property: 3,
+            recall_assault_consume: 2,
+            weakness: 5,
+            rsistance: 4
+        })
     }
 
     // 启动服务器
