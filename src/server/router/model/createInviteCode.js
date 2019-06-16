@@ -11,7 +11,7 @@ class CreateInviteCode {
         this.res = res
     }
     post () { const req=this.req, res=this.res
-        return new Promise ((reject, resolve) => {
+        return new Promise ((resolve, reject) => {
             // 请求数据
             let trueData = null
             let currentData = ''
@@ -25,7 +25,7 @@ class CreateInviteCode {
                 // 存入 redis
                 Redis_client.set(inviteCode, trueData['user_name'], (err, response) => {
                     if (err) { 
-                        resolve(err)
+                        reject(err)
                     } else {
 
                         // 设置过期时间 30min过期
@@ -42,7 +42,7 @@ class CreateInviteCode {
                             "data": inviteCode
                         })
         
-                        reject({
+                        resolve({
                             "user_name": trueData['user_name'],
                             "invite_code": inviteCode
                         })

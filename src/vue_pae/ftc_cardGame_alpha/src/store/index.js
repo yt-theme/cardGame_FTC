@@ -8,6 +8,8 @@ export default new Vuex.Store({
         connect: false,
         info: '',
         // userInfo: {}
+        // 卡牌数据
+        cardDataList: []
     },
     mutations: {
         'SOCKET_CONNECT' (state) {
@@ -15,10 +17,15 @@ export default new Vuex.Store({
         },
         'SOCKET_LOGINS' (state, info) {
             state.info = info
-        }
+        },
         // SOCKET_USER_INFO(state, data) {
         //     state.userInfo = data
         // }
+        
+        // 改变 卡牌数据
+        change_cardDataList (state, dat) {
+            state.cardDataList = dat
+        }
     },
     actions: {
         socketConnect(context, value) {
@@ -26,6 +33,11 @@ export default new Vuex.Store({
         },
         socketLogins(context, value) {
             console.log('store =>', value)
+        },
+
+        // 设置 卡牌数据
+        set_cardDataList (context, dat) {
+            context.commit('change_cardDataList', dat)
         }
     }
 })

@@ -6,10 +6,13 @@ let server_router = require('./router/router')
 let socket_router = require('./socket/socket')
 
 // 配置文件 => 静态文件目录
-let { STATIC_DIR, SERVER_PORT } = require('../../config.js')
+let { STATIC_DIR, SERVER_PORT, REDIS_CARDINFO } = require('../../config.js')
 
 // mongo
 let { Test_model, CardProperty_model } = require('./db/mongodb')
+
+// redis
+let { Redis_client } = require('./db/redis')
 
 class Server {
     constructor () {
@@ -31,7 +34,7 @@ class Server {
         // 静态文件目录
         this.app.use('/file', this.express.static(STATIC_DIR))
         // 初始化 mongodb
-        // Test_model().insert({'name': '222222222', 'text': 'wqrfaw4ef'}).then((result) => {
+        // Test_model().insertOne({'name': '222222222', 'text': 'wqrfaw4ef'}).then((result) => {
 
         //     Test_model().updateMany({"name": "222222222"}, {$set:{"name": "111"}}).then((result) => {
 
@@ -42,27 +45,23 @@ class Server {
         //     }).catch((err) => { throw err })
 
         // }).catch((err) => { throw err })
-        CardProperty_model().insert({
-            id: 'FURRY001/2019.07',
-            img_name: '1.jpg',
-            img_url: 'http://127.0.0.1:1234/file/img/1.jpg',
 
-            skill_first_text: '野外生存',
-            skill_first_consume_type: 7,
-            skill_first_consume: 1,
-            skill_first_damage: 0,
-
-            skill_second_text: '星辰之跃',
-            skill_second_consume_type: 3,
-            skill_second_consume: 3,
-            skill_second_damage: 20,
-
-            health: 80,
-            role_property: 3,
-            recall_assault_consume: 2,
-            weakness: 5,
-            rsistance: 4
-        })
+        // 将 mongo 中 card_property 所有内容取出 存入 redis
+        CardProperty_model().find({}).then((result) => {
+            console.log('all card info', result)
+            // 存入 redis
+            Redis_client.set(REDIS_CARDINFO, JSON.stringify(result), (err, data) => {
+                if (err) {
+                    console.log('redis set card_property err =>', err)
+                    return false
+                }
+                console.log('redis set card_property succ =>')
+                // 查看 redis card_property 数据
+                Redis_client.get(REDIS_CARDINFO, (err, res) => {
+                    console.log('redis get =>',  res)
+                })
+            })
+        }).catch((err) => { throw err })
     }
 
     // 启动服务器

@@ -5,7 +5,7 @@
             <div class="tabs_wrap">
                 <div class="tabs_content">
                     <div v-for="i in cardDataRole_list" @mousemove="show_bigCard($event, i)" @mouseleave="hide_bigCard($event)">
-                        <img :src="i.card_url"/>
+                        <img :src="i.img_url"/>
                     </div>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="tabs_wrap">
                 <div class="tabs_content">
                     <div v-for="i in cardDataMagic_list" @mousemove="show_bigCard($event, i)" @mouseleave="hide_bigCard($event)">
-                        <img :src="i.card_url"/>
+                        <img :src="i.img_url"/>
                     </div>
                 </div>
             </div>
@@ -109,10 +109,23 @@ export default {
             api_queryCardJson({
 
             }).then((v) => {
-                if (v['status'] === 200) {
-                    __this__.cardDataRole_list = v['data']['role']
-                    __this__.cardDataMagic_list = v['data']['magic']
-                    console.log('v', v['data'])
+                if (v['data']['stat'] === 1) {
+                    __this__.cardDataRole_list = []
+                    __this__.cardDataMagic_list = []
+                    // 卡牌分类 => type: 1角色牌 2魔法牌
+                    const json = JSON.parse(v['data']['data'])
+                    json.forEach((ite) => {
+                        // 如果是角色牌
+                        if (ite['type'] === 1) {
+                            __this__.cardDataRole_list.push(ite)
+                        // 如果是魔法牌
+                        } else if (ite['type'] === 2) {
+                            __this__.cardDataMagic_list.push(ite)
+                        }
+                    })
+                    // 存入 store
+                    this.$store.dispatch('set_cardDataList', json)
+                    console.log('store', this.$store.state.cardDataList)
                 }
             }).catch((err) => {
 
@@ -121,12 +134,12 @@ export default {
         // 查看卡牌大图事件
         show_bigCard (event, cardObj) {
             // 图片
-            this.current_showBigCard_src = cardObj.card_url
+            this.current_showBigCard_src = cardObj.img_url
             // text内容
             this.current_showBigCard_text = {
-                property: cardObj.card_info.first || '暂无属性',
-                skill_first: cardObj.card_info.second || '暂无第一技能',
-                skill_second: cardObj.card_info.proto || '暂无第二技能'
+                property: cardObj.role_property || '暂无属性',
+                skill_first: cardObj.skill_first_text || '暂无第一技能',
+                skill_second: cardObj.skill_second_text || '暂无第二技能'
             }
             
             // 获取框宽度 高度

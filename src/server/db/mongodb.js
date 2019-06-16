@@ -29,6 +29,8 @@ const cardProperty_schema = mongoose.Schema({
         type: String,
         index: true // id 为索引
     },
+    // 卡牌类型 => 1角色牌 2魔法牌
+    type: Number,
     
     /**
      * 文件属性
@@ -62,6 +64,8 @@ const cardProperty_schema = mongoose.Schema({
     /**
      * 基本性质
      */
+    // 名称
+    name: String,
     // 生命值
     health: Number,
     // 角色属性 => 1光 2暗 3水 4火 5风 6通用 7特殊
