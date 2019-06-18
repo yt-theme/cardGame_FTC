@@ -11,7 +11,9 @@ import { querySession, updateSession } from '@/lib/utils.js'
 
 // canvas
 import { canvas_circle } from './component/canvas_circle'
-import { canvas_background } from './component/canvas_background'
+import { Canvas_background } from './component/canvas_background'
+import { Canvas_sample } from './component/canvas_sample'
+import { Canvas_progressBar } from './component/canvas_progressBar'
 
 export default {
     data () {
@@ -37,11 +39,6 @@ export default {
         }
     },
     methods: {
-        // 退出房间
-        leave_room () {
-            this.$socket.emit('leave')
-        },
-        
         // 初始化 canvas
         canvas_init () {
             // canvas 对象
@@ -68,14 +65,22 @@ export default {
             this.canvasCtx.clearRect(0, 0, w, h)
 
             // 绘制背景
-            new canvas_background({canvasOption, canvasCtx, battleCanvasObj}).render()
-            new canvas_circle({w, canvasOption, canvasCtx})
+            new Canvas_background({canvasOption, canvasCtx, battleCanvasObj}).render()
+            // new canvas_circle({w, canvasOption, canvasCtx})
+            // new Canvas_sample({canvasOption, canvasCtx, battleCanvasObj}).draw()
+            new Canvas_progressBar({canvasOption, canvasCtx, battleCanvasObj}).render()
 
         }, 20)
     },
-    destory () {
-        this.leave_room()
+    destroyed () {
+        this.leave()
         this.canvasTimer = null
+    },
+    sockets: {
+        // 退出房间
+        leave () {
+
+        }
     }
 }
 </script>

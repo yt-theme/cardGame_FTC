@@ -29,7 +29,7 @@
             </div>
         </div>
         <!-- 对战登录框 -->
-        <div class="battleLogin_container">
+        <div v-show="battleShow" class="battleLogin_container">
             <Homebattlelogin></Homebattlelogin>
         </div>
         <!-- 查看卡牌大图 -->
@@ -71,7 +71,9 @@ export default {
             currentBigCardWH: {
                 width: '',
                 height: ''
-            }
+            },
+            // battle登录框是否显示
+            battleShow: false
         }
     },
     methods: {
@@ -110,6 +112,7 @@ export default {
 
             }).then((v) => {
                 if (v['data']['stat'] === 1) {
+                    this.battleShow = true
                     __this__.cardDataRole_list = []
                     __this__.cardDataMagic_list = []
                     // 卡牌分类 => type: 1角色牌 2魔法牌

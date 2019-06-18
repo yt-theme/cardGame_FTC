@@ -1,5 +1,4 @@
-// 设置 canvas 背景色
-export class Canvas_background {
+export class Canvas_sample {
     constructor ({canvasOption, canvasCtx, battleCanvasObj}) {
         // canvas 参数
         this.canvasOption    = canvasOption
@@ -8,9 +7,11 @@ export class Canvas_background {
         // canvas 对象
         this.battleCanvasObj = battleCanvasObj
     }
+    draw () {
+        this.canvasCtx.fillStyle = "rgb(200,0,0)"
+        this.canvasCtx.fillReat(10, 10, 55, 50)
 
-    render () {
-        this.canvasCtx.fillStyle = '#0b3469'  
-        this.canvasCtx.fillRect(0, 0, this.battleCanvasObj.width , this.battleCanvasObj.height)
+        this.canvasCtx.fillStyle = "rgba(0, 0, 200, 0.5)"
+        this.canvasCtx.fillReat(30, 30, 55, 50)
     }
 }

@@ -36,20 +36,18 @@ export default {
     },
     watch: {
         // 如果 inviteCode 有变化 恢复初始 battleBtn
-        inviteCode () {
+        'inviteCode' () {
             this.battleBtnDisabled = false;
             this.battleBtnTxt = '开战'
-        }
+        },
     },
     methods: {
-        // 创建随机数
+        // 请求邀请码
         queryCreateCode () {
             this.battleBtnTxt = '开战'
-            // 请求邀请码
             api_createInviteCode({
                 'user_name': querySession('userName') || ''
             }).then((v) => {
-                console.log('v', v)
                 if (v['status'] === 200 && v['data']['stat'] === 1 && v['data']['data']) {
                     this.inviteCode = v['data']['data']
                     // 邀请码存入本地
@@ -61,9 +59,9 @@ export default {
         },
         // 战斗按钮
         battle () {
-            this.battleBtnTxt = '匹配中'
-            // 检查是否存在邀请码
+            // 检查是否存在邀请码 && 是否把卡牌数据列表加载完毕
             if (this.inviteCode) {
+                this.battleBtnTxt = '匹配中'
                 this.$socket.emit('joinroom', { inviteCode: this.inviteCode })
             }
         },
