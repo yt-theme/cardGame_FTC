@@ -68,7 +68,7 @@ export default {
             new Canvas_background({canvasOption, canvasCtx, battleCanvasObj}).render()
             // new canvas_circle({w, canvasOption, canvasCtx})
             // new Canvas_sample({canvasOption, canvasCtx, battleCanvasObj}).draw()
-            new Canvas_progressBar({canvasOption, canvasCtx, battleCanvasObj}).render()
+            new Canvas_progressBar({canvasOption, canvasCtx, battleCanvasObj, progress: Math.random()*100}).render()
 
         }, 20)
     },
