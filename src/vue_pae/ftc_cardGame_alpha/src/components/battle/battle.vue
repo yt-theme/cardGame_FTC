@@ -13,7 +13,7 @@ import { querySession, updateSession } from '@/lib/utils.js'
 import { canvas_circle } from './component/canvas_circle'
 import { Canvas_background } from './component/canvas_background'
 import { Canvas_sample } from './component/canvas_sample'
-import { Canvas_progressBar } from './component/canvas_progressBar'
+import { Canvas_loadingBar } from './component/canvas_loadingBar'
 
 export default {
     data () {
@@ -55,22 +55,28 @@ export default {
     mounted () {
         // canvas 初始化
         this.canvas_init()
+        let canvasOption    = this.canvasOption
+        let canvasCtx       = this.canvasCtx
+        let battleCanvasObj = this.battleCanvasObj
+        let w = document.body.clientWidth
+        let h = document.body.clientHeight - 3
+
+        // canvas func
+        // 加载进度条
+        let canvas_loadingBar = new Canvas_loadingBar({canvasOption, canvasCtx, battleCanvasObj})
 
         this.canvasTimer = setInterval(() => {
-            let canvasOption    = this.canvasOption
-            let canvasCtx       = this.canvasCtx
-            let battleCanvasObj = this.battleCanvasObj
-            let w = document.body.clientWidth
-            let h = document.body.clientHeight - 3
+            
             this.canvasCtx.clearRect(0, 0, w, h)
 
             // 绘制背景
-            new Canvas_background({canvasOption, canvasCtx, battleCanvasObj}).render()
+            new Canvas_background({canvasOption, canvasCtx, battleCanvasObj}).init()
             // new canvas_circle({w, canvasOption, canvasCtx})
             // new Canvas_sample({canvasOption, canvasCtx, battleCanvasObj}).draw()
-            new Canvas_progressBar({canvasOption, canvasCtx, battleCanvasObj, progress: Math.random()*100}).render()
+            // new Canvas_progressBar({canvasOption, canvasCtx, battleCanvasObj}).init(Math.random()*100)
+            canvas_loadingBar.init(Math.random()*100)
 
-        }, 20)
+        }, 60/1000)
     },
     destroyed () {
         this.leave()

@@ -9,7 +9,7 @@ export class Canvas_background {
         this.battleCanvasObj = battleCanvasObj
     }
 
-    render () {
+    init () {
         this.canvasCtx.fillStyle = '#0b3469'  
         this.canvasCtx.fillRect(0, 0, this.battleCanvasObj.width , this.battleCanvasObj.height)
     }

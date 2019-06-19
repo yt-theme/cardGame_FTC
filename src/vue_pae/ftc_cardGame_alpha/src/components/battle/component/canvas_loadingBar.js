@@ -1,5 +1,5 @@
-export class Canvas_progressBar {
-    constructor ({canvasOption, canvasCtx, battleCanvasObj, progress}) {
+export class Canvas_loadingBar {
+    constructor ({canvasOption, canvasCtx, battleCanvasObj}) {
         // canvas 参数
         this.canvasOption    = canvasOption
         // canvas 画布
@@ -8,14 +8,14 @@ export class Canvas_progressBar {
         this.battleCanvasObj = battleCanvasObj
 
         // 进度条 百分比 初始值
-        this.progressPrecent = progress
+        this.progressPrecent = 0
         
         this.init()
     }
     // 初始化参数
-    init () {
+    init (progress) {
         // 百分比
-        // this.progressPrecent = progress
+        this.progressPrecent = progress
 
         // canvas 画布宽 高
         this.canva_w       = this.battleCanvasObj.width 
@@ -69,6 +69,8 @@ export class Canvas_progressBar {
         // 内进度条 圆角 绘图方向
         this.inner_cirL_dr = true // 逆时针
         this.inner_cirR_dr = false // 顺时针
+
+        this.render()
     }
     render () { let ctx = this.canvasCtx
         // 设置进度条百分比
