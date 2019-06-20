@@ -10,7 +10,7 @@ export class Canvas_loadingBar {
         // 进度条 百分比 初始值
         this.progressPrecent = 0
         
-        this.init()
+        // this.init()
     }
     // 初始化参数
     init (progress) {
@@ -50,7 +50,7 @@ export class Canvas_loadingBar {
         // 内进度条 终点坐标 最大值
         this.inner_Max_x   = this.barPosition_x + this.barHeight - 2
         // 内进度条 宽 初始化为 0 高
-        this.inner_w       = (this.progressPrecent/100 * this.barWidth) >= this.barWidth ? this.barWidth : (this.progressPrecent/100 * this.barWidth)
+        this.inner_w       = (this.progressPrecent/100 * this.barWidth) > this.barWidth ? this.barWidth : (this.progressPrecent/100 * this.barWidth - 3)
         this.inner_h       = this.barHeight - 3 - 3
 
         // 内进度条 左右 圆角 位置
