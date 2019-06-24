@@ -9,7 +9,9 @@ export default new Vuex.Store({
         info: '',
         // userInfo: {}
         // 卡牌数据
-        cardDataList: []
+        cardDataList: [],
+        // 已加载完毕的卡牌图片
+        loaded_cardImageData: {}
     },
     mutations: {
         'SOCKET_CONNECT' (state) {
@@ -25,6 +27,10 @@ export default new Vuex.Store({
         // 改变 卡牌数据
         change_cardDataList (state, dat) {
             state.cardDataList = dat
+        },
+        // 改变 已加载完毕的卡牌图片
+        change_loaded_cardImageData (state, dat) {
+            state.loaded_cardImageData = dat
         }
     },
     actions: {
@@ -38,6 +44,10 @@ export default new Vuex.Store({
         // 设置 卡牌数据
         set_cardDataList (context, dat) {
             context.commit('change_cardDataList', dat)
+        },
+        // 设置 已加载完毕的卡牌图片
+        set_loaded_cardImageData(context, dat) {
+            context.commit('change_loaded_cardImageData', dat)
         }
     }
 })

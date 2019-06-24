@@ -1,5 +1,7 @@
+import { model } from "mongoose";
+
 // 预览框
-export class Canvas_cardPreview {
+class Canvas_cardPreview {
     constructor ({canvasOption, canvasCtx, battleCanvasObj}) {
         // canvas 参数
         this.canvasOption    = canvasOption
@@ -36,7 +38,7 @@ export class Canvas_cardPreview {
         this.out_arcLB_e  = Math.PI*0.5
         this.out_arcLB_dr = true // 逆时针
 
-        // 线
+        // 外 线
         this.out_lineT_x_s = this.out_arcRT_x + this.out_arc_r
         this.out_lineT_y_s = this.out_arcRT_y - this.out_arc_r
         this.out_lineT_x_e = this.out_arcRT_x - this.out_arc_r
@@ -57,9 +59,10 @@ export class Canvas_cardPreview {
         this.out_lineL_x_e = this.out_arcLB_x - this.out_arc_r
         this.out_lineL_y_e = this.out_arcLB_y - this.out_arc_r
 
-        this.render()
+        // this.render()
     }
     render () { let ctx = this.canvasCtx
+        ctx.save()
         ctx.beginPath()
         ctx.moveTo(this.out_lineL_x_s, this.out_lineL_y_s)
         ctx.lineTo(this.out_lineL_x_e, this.out_lineL_y_e)
@@ -72,14 +75,31 @@ export class Canvas_cardPreview {
         ctx.arc(this.out_arcLT_x, this.out_arcLT_y, this.out_arc_r, this.out_arcLT_s, this.out_arcLT_e, this.out_arcLT_dr)
        
         ctx.closePath()
-        ctx.shadowBlur = '2'
-        ctx.shadowOffsetX = '3'
-        ctx.shadowOffsetY = '3'
-        ctx.shadowColor = 'rgb(22, 28, 36)'
+        // ctx.shadowBlur = '2'
+        // ctx.shadowOffsetX = '3'
+        // ctx.shadowOffsetY = '3'
+        // ctx.shadowColor = 'rgb(22, 28, 36)'
         ctx.strokeStyle = 'rgb(50, 96, 165)'
         ctx.lineWidth = '6'
         ctx.stroke()
         ctx.fillStyle = 'rgb(8, 38, 84)'
         ctx.fill()
+        ctx.restore()
     }
+}
+
+// 框 内卡牌
+class Canvas_cardPreview_card extends Canvas_cardPreview {
+    constructor ({canvasOption, canvasCtx, battleCanvasObj}) {
+        super({canvasOption, canvasCtx, battleCanvasObj})
+        // alert(super.canvasCtx)
+    }
+    // init () {
+    //     alert(super.init())
+    // }
+}
+
+export {
+    Canvas_cardPreview,
+    Canvas_cardPreview_card
 }
