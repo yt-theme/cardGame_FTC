@@ -11,8 +11,10 @@ module.exports = {
     // redis
     "REDIS_URL": '0.0.0.0',
     "REDIS_PORT": 6379,
-    // 卡片牌信息库名
+    // 卡牌信息库名
     'REDIS_CARDINFO': 'card_property',
+    // 卡牌信息 用户选择后的
+    'REDIS_SELECTED_CARDINFO': 'card_selected_property',
 
     // mongodb
     "MONGODB_URL": 'mongodb://0.0.0.0',

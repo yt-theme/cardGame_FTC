@@ -3,12 +3,23 @@
        <!-- canvas -->
         <canvas ref="battleVisual"></canvas>
 
+        <!-- ------------------------------------------------------------------------------------------ -->
         <!-- 卡牌选择框 -->
         <div v-show="battle_cardSelector_show" class="battle_cardSelector">
             <!-- 卡牌切换栏 -->
             <ul class="battle_cardSelector_tab">
-                <li @click="() => {battle_cardSelector_tab_active = 1}" :class="[battle_cardSelector_tab_active === 1 ? battle_cardSelector_tabLi_active : '', '']">角色牌</li>
-                <li @click="() => {battle_cardSelector_tab_active = 2}" :class="[battle_cardSelector_tab_active === 2 ? battle_cardSelector_tabLi_active : '', '']">魔法牌</li>
+                <li @click="() => {battle_cardSelector_tab_active = 1}" :class="[battle_cardSelector_tab_active === 1 ? battle_cardSelector_tabLi_active : '', '']">
+                    角色牌
+                    <!-- 已选当前类型卡牌数 -->
+                    <small>已选{{ selected_card_object_arr.filter((ite) => { return String(ite['type']) === '1' }).length }}张</small>
+                </li>
+                <li @click="() => {battle_cardSelector_tab_active = 2}" :class="[battle_cardSelector_tab_active === 2 ? battle_cardSelector_tabLi_active : '', '']">
+                    魔法牌
+                    <!-- 已选当前类型卡牌数 -->
+                    <small>已选{{ selected_card_object_arr.filter((ite) => { return String(ite['type']) === '2' }).length }}张</small>
+                </li>
+                <!-- 开始准备按钮 -->
+                <button v-show="selectCard_canPrepare" class="battle_cardSelector_pped">准备完毕</button>
             </ul>
             <!-- 卡牌展示区域 -->
             <div class="battle_cardSelector_view">
@@ -36,6 +47,7 @@
                 </ul>
             </div>
         </div>
+        <!-- ------------------------------------------------------------------------------------------ -->
     </div>
 </template>
 
@@ -67,6 +79,10 @@ export default {
             battle_cardSelector_tabLi_active: 'battle_cardSelector_tabLi_active',
             // 已选择的卡牌
             selected_card_arr: [],
+            // 已选择卡牌对象的级数组 里面包含所有卡牌信息数组
+            selected_card_object_arr: [],
+            // 已选择的卡牌是否可以开始游戏
+            selectCard_canPrepare: false,
             // -----------------------------------------
 
             // canvas obj
@@ -91,6 +107,21 @@ export default {
     watch: {
         '$route' () {
             
+        },
+        // 监听 已选择卡牌数量 判断是否显示准备完毕
+        'selected_card_object_arr' (val) {
+
+            // 角色牌选择数量
+            let roleNum = val.filter((ite) => { String(ite['type']) === '1' }).length
+            // 魔法牌数量
+            let magicNum = val.filter((ite) => { String(ite['type']) === '2' }).length
+
+            // 判断数量 控制显示按钮
+            if (roleNum>=6 && magicNum>=40) {
+                this.selectCard_canPrepare = true
+            } else {
+                this.selectCard_canPrepare = false
+            }
         }
     },
     computed: {
@@ -99,16 +130,22 @@ export default {
         }
     },
     methods: {
+
+        // -------------------------------------------------
         // 卡牌点击时
         cardSelector_card_click (ite_obj) {
             // 判断 selected_card_arr 是否存在已点击项
             if (this.selected_card_arr.indexOf(ite_obj['id']) !== -1) {
                 // 如果数组里存在已点击项则 删除数组中此项
                 this.selected_card_arr.splice(this.selected_card_arr.indexOf(ite_obj['id']), 1)
+                this.selected_card_object_arr.splice(this.selected_card_arr.indexOf(ite_obj['id']), 1)
             } else {
                 this.selected_card_arr.push(ite_obj['id'])
+                this.selected_card_object_arr.push(ite_obj)
             }
         },
+        // -------------------------------------------------
+
         // 初始化 canvas
         canvas_init () {
             // canvas 对象
@@ -180,6 +217,14 @@ export default {
 </script>
 
 <style scoped>
+@keyframes prepareBtn {
+    0% { box-shadow: 0 0 14px #85eb55; }
+    50% { box-shadow: 0 0 3px #85eb55; }
+    100% { box-shadow: 0 0 14px #85eb55; }
+}
+small {
+    font-size: 18px;
+}
 .battle_container {
     position: relative;
     width: 100vw;
@@ -217,13 +262,23 @@ export default {
     text-shadow: 0 0 8px rgb(128, 166, 223);
     cursor: pointer;
 }
-.battle_cardSelector_tab .battle_cardSelector_tabLi_active {
+.battle_cardSelector_tab .battle_cardSelector_tabLi_active, .battle_cardSelector_tab .battle_cardSelector_pped {
     border-radius: 13px;
     font-size: 33px;
     text-align: center;
-    padding: 0.1em 1em;
     background-color: rgb(128, 166, 223);
     color: rgb(8, 38, 84);
+    padding: 0.1em 1em;
+}
+.battle_cardSelector_tab .battle_cardSelector_pped {
+    position: absolute;
+    right: 16px;
+    border: 0;
+    box-shadow: 0 0 14px #85eb55;
+    background-color: rgb(42, 190, 109);
+    color: #116809;
+    cursor: pointer;
+    animation: prepareBtn 0.5s infinite;
 }
 .battle_cardSelector_view {
     width: 100%;
