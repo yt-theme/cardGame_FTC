@@ -3,7 +3,7 @@ const queryString = require('querystring')
 const uuid = require('uuid')
 
 // redis
-const { Redis_client } = require('../../db/redis')
+const { Redis_client } = require('../../db/redis/redis')
 
 class CreateInviteCode {
     constructor (req, res) {

@@ -1,4 +1,4 @@
-const { Redis_client } = require('../db/redis')
+const { Redis_client } = require('../db/redis/redis')
 
 // 生成邀请码
 const { CreateInviteCode } = require('./model/createInviteCode')

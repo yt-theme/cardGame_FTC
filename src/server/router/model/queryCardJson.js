@@ -4,7 +4,7 @@
 const queryString = require('querystring')
 
 // redis
-const { Redis_client } = require('../../db/redis')
+const { Redis_client } = require('../../db/redis/redis')
 
 // 配置文件
 const { REDIS_CARDINFO } = require('../../../../config')

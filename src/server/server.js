@@ -9,10 +9,10 @@ let socket_router = require('./socket/socket')
 let { STATIC_DIR, SERVER_PORT, REDIS_CARDINFO } = require('../../config.js')
 
 // mongo
-let { Test_model, CardProperty_model } = require('./db/mongodb')
+let { Test_model, CardProperty_model } = require('./db/mongodb/mongodb')
 
 // redis
-let { Redis_client } = require('./db/redis')
+let { Redis_client } = require('./db/redis/redis')
 
 class Server {
     constructor () {
@@ -33,18 +33,6 @@ class Server {
     init () {
         // 静态文件目录
         this.app.use('/file', this.express.static(STATIC_DIR))
-        // 初始化 mongodb
-        // Test_model().insertOne({'name': '222222222', 'text': 'wqrfaw4ef'}).then((result) => {
-
-        //     Test_model().updateMany({"name": "222222222"}, {$set:{"name": "111"}}).then((result) => {
-
-        //         Test_model().find({}, (result) => {
-
-        //         }).catch((err) => { throw err })
-
-        //     }).catch((err) => { throw err })
-
-        // }).catch((err) => { throw err })
 
         // 将 mongo 中 card_property 所有内容取出 存入 redis
         CardProperty_model().find({}).then((result) => {
