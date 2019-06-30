@@ -6,7 +6,7 @@ let server_router = require('./router/router')
 let socket_router = require('./socket/socket')
 
 // 配置文件 => 静态文件目录
-let { STATIC_DIR, SERVER_PORT, REDIS_CARDINFO } = require('../../config.js')
+let { STATIC_ROUTER, STATIC_DIR, SERVER_PORT, REDIS_CARDINFO } = require('../../config.js')
 
 // mongo
 let { Test_model, CardProperty_model } = require('./db/mongodb/mongodb')
@@ -32,7 +32,7 @@ class Server {
     // 初始化服务器
     init () {
         // 静态文件目录
-        this.app.use('/file', this.express.static(STATIC_DIR))
+        this.app.use(STATIC_ROUTER, this.express.static(STATIC_DIR))
 
         // 将 mongo 中 card_property 所有内容取出 存入 redis
         CardProperty_model().find({}).then((result) => {

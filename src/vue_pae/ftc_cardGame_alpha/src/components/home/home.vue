@@ -122,7 +122,7 @@ export default {
                         if (ite['type'] === 1) {
                             __this__.cardDataRole_list.push(ite)
                         // 如果是魔法牌
-                        } else if (ite['type'] === 2) {
+                        } else if (ite['type'] === 2 || ite['type'] === 3) {
                             __this__.cardDataMagic_list.push(ite)
                         }
                     })

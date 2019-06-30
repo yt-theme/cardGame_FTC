@@ -14,7 +14,7 @@ const CardProperty_schema = (mongoose) => {
             type: String,
             index: true // id 为索引
         },
-        // 卡牌类型 => 1角色牌 2魔法牌
+        // 卡牌类型 => 1角色牌 2魔法牌 3魔法牌羁绊卡
         type: Number,
         
         /**

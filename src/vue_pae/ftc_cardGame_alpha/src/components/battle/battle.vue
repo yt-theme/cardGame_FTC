@@ -11,12 +11,12 @@
                 <li @click="() => {battle_cardSelector_tab_active = 1}" :class="[battle_cardSelector_tab_active === 1 ? battle_cardSelector_tabLi_active : '', '']">
                     角色牌
                     <!-- 已选当前类型卡牌数 -->
-                    <small>已选{{ selected_card_object_arr.filter((ite) => { return String(ite['type']) === '1' }).length }}张</small>
+                    <small>已选{{ selected_card_roleNum }}张</small>
                 </li>
                 <li @click="() => {battle_cardSelector_tab_active = 2}" :class="[battle_cardSelector_tab_active === 2 ? battle_cardSelector_tabLi_active : '', '']">
                     魔法牌
                     <!-- 已选当前类型卡牌数 -->
-                    <small>已选{{ selected_card_object_arr.filter((ite) => { return String(ite['type']) === '2' }).length }}张</small>
+                    <small>已选{{ selected_card_magicNum }}张</small>
                 </li>
                 <!-- 开始准备按钮 -->
                 <button v-show="selectCard_canPrepare" class="battle_cardSelector_pped">准备完毕</button>
@@ -36,7 +36,7 @@
                     </template>
                     <!-- 如果是魔法牌 -->
                     <template v-if="battle_cardSelector_tab_active === 2"  v-for="i in card_data_list">
-                        <template v-if="String(i['type']) === '2'">
+                        <template v-if="String(i['type']) === '2' || String(i['type']) === '3'">
                             <li @click="cardSelector_card_click(i)">
                                 <img :src="i['img_url']"/>
                                 <P>{{i.name}}</P>
@@ -79,6 +79,9 @@ export default {
             battle_cardSelector_tabLi_active: 'battle_cardSelector_tabLi_active',
             // 已选择的卡牌
             selected_card_arr: [],
+            // 已选择的角色/魔法牌数量
+            selected_card_roleNum: 0,
+            selected_card_magicNum: 0,
             // 已选择卡牌对象的级数组 里面包含所有卡牌信息数组
             selected_card_object_arr: [],
             // 已选择的卡牌是否可以开始游戏
@@ -110,14 +113,19 @@ export default {
         },
         // 监听 已选择卡牌数量 判断是否显示准备完毕
         'selected_card_object_arr' (val) {
-
-            // 角色牌选择数量
-            let roleNum = val.filter((ite) => { String(ite['type']) === '1' }).length
-            // 魔法牌数量
-            let magicNum = val.filter((ite) => { String(ite['type']) === '2' }).length
+            // // 角色牌选择数量
+            // this.selected_card_roleNum = val.filter((ite) => { console.log('role ite', ite.type); return String(ite['type']) === '1' }).length
+            // // 魔法牌数量
+            // this.selected_card_magicNum = val.filter((ite) => { console.log('magic ite', ite.type); return (String(ite['type']) === '2') || (String(ite['type']) === '3') }).length
+            let self = this
+            self.selected_card_roleNum=0,  self.selected_card_magicNum=0
+            val.forEach((ite) => { 
+                if (String(ite['type']) === '1') { self.selected_card_roleNum += 1 }
+                else { self.selected_card_magicNum += 1 }
+            })
 
             // 判断数量 控制显示按钮
-            if (roleNum>=6 && magicNum>=40) {
+            if (this.selected_card_roleNum>=1 && this.selected_card_magicNum>=1) {
                 this.selectCard_canPrepare = true
             } else {
                 this.selectCard_canPrepare = false
@@ -135,10 +143,11 @@ export default {
         // 卡牌点击时
         cardSelector_card_click (ite_obj) {
             // 判断 selected_card_arr 是否存在已点击项
-            if (this.selected_card_arr.indexOf(ite_obj['id']) !== -1) {
+            if (this.selected_card_arr.indexOf(ite_obj['id']) !== -1)   {
                 // 如果数组里存在已点击项则 删除数组中此项
-                this.selected_card_arr.splice(this.selected_card_arr.indexOf(ite_obj['id']), 1)
-                this.selected_card_object_arr.splice(this.selected_card_arr.indexOf(ite_obj['id']), 1)
+                let index = this.selected_card_arr.indexOf(ite_obj['id'])
+                this.selected_card_arr.splice(index, 1)
+                this.selected_card_object_arr.splice(index, 1)
             } else {
                 this.selected_card_arr.push(ite_obj['id'])
                 this.selected_card_object_arr.push(ite_obj)
@@ -252,7 +261,7 @@ small {
     /* height: 70px; */
     color: rgb(128, 166, 223);
     border-radius: 13px;
-    font-size: 33px;
+    font-size: 29px;
     text-align: center;
     /* line-height: 70px; */
     padding: 0.1em 1em;
@@ -264,7 +273,7 @@ small {
 }
 .battle_cardSelector_tab .battle_cardSelector_tabLi_active, .battle_cardSelector_tab .battle_cardSelector_pped {
     border-radius: 13px;
-    font-size: 33px;
+    font-size: 29px;
     text-align: center;
     background-color: rgb(128, 166, 223);
     color: rgb(8, 38, 84);
