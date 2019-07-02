@@ -30,19 +30,29 @@ const CardProperty_schema = (mongoose) => {
          */
         // first 技能
         skill_first: [{
+            // 第一技能标题
+            skill_first_title: String,
             // 第一技能介绍
             skill_first_text: String,
+            // 第一技能介绍 附加
+            skill_first_text_2: String,
             // 第一技能消耗的能量类型 => 1光 2暗 3水 4火 5风 6通用 7特殊
             skill_first_consume_type: Number,
             // 第一技能消耗的能量
             skill_first_consume: Number,
             // 第一技能伤害参考
             skill_first_damage: Number,
+            // 第一技能释放条件
+            skill_first_release_condition: ''
         }],
         // second 技能        
         skill_second: [{
+            // 第二技能标题
+            skill_second_title: String,
             // 第二技能介绍
             skill_second_text: String,
+            // 第二技能介绍 附加
+            skill_second_text_2: String,
             // 第二技能消耗的能量类型 => 1光 2暗 3水 4火 5风 6通用 7特殊
             skill_second_consume_type: Number,
             // 第二技能消耗
@@ -65,7 +75,9 @@ const CardProperty_schema = (mongoose) => {
         // 弱点 => 角色属性 => 1光 2暗 3水 4火 5风 6通用 7特殊
         weakness: Number,
         // 抵抗
-        rsistance: Number
+        rsistance: Number,
+        // 背景故事
+        story: String,
     })
 }
 
